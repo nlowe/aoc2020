@@ -1,0 +1,37 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [1.15]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Cache Go Modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod # $GOPATH doesn't seem to be set by actions/setup-go
+          key: build-${{ matrix.go }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+
+      - name: Run Tests
+        run: go test -v -cover -covermode=count -coverprofile=coverage.out ./...
+
+      - name: Convert Coverage
+        uses: jandelgado/gcov2lcov-action@v1.0.7
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: coverage.lcov
