@@ -9,75 +9,26 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/nlowe/aoc2020/util"
 	"github.com/zellyn/kooky"
 	"github.com/zellyn/kooky/chrome"
 )
 
-const (
-	glueTemplate = `package day{{ .N }}
-
-import "github.com/spf13/cobra"
-
-func AddCommandsTo(root *cobra.Command) {
-	day := &cobra.Command{
-		Use:   "{{ .N }}",
-		Short: "Problems for Day {{ .N }}",
+var (
+	parts = [...]string{"A", "B"}
+	funcs = template.FuncMap{
+		"toLower": strings.ToLower,
+		"seq": func(start, end int) (result []int) {
+			for i := start; i <= end; i++ {
+				result = append(result, i)
+			}
+			return
+		},
 	}
-
-	//day.AddCommand(aCommand())
-    //day.AddCommand(bCommand())
-
-	root.AddCommand(day)
-}
-`
-
-	problemTemplate = `package day{{ .N }}
-
-import (
-    "fmt"
-
-    "github.com/nlowe/aoc2020/challenge"
-	"github.com/nlowe/aoc2020/util"
-	"github.com/spf13/cobra"
-)
-
-func {{ .AB | toLower }}Command() *cobra.Command {
-    return &cobra.Command{
-        Use:   "{{ .AB | toLower }}",
-        Short: "Day {{ .N }}, Problem {{ .AB }}",
-        Run: func(_ *cobra.Command, _ []string) {
-            fmt.Printf("Answer: %d\n", {{ .AB | toLower }}(challenge.FromFile()))
-        },
-    }
-}
-
-func {{ .AB | toLower }}(challenge *challenge.Input) int {
-    return 0
-}
-`
-
-	testTemplate = `package day{{ .N }}
-
-import (
-	"testing"
-
-	"github.com/nlowe/aoc2020/challenge"
-	"github.com/stretchr/testify/require"
-)
-
-func Test{{ .AB }}(t *testing.T) {
-	input := challenge.FromLiteral("foobar")
-
-	result := {{ .AB | toLower }}(input)
-
-	require.Equal(t, 42, result)
-}
-`
 )
 
 type metadata struct {
@@ -86,20 +37,43 @@ type metadata struct {
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		abort(fmt.Errorf("expected 3 args but got %d", len(os.Args)))
-	}
+	n := dayLimit(time.Now())
 
-	n, err := strconv.Atoi(os.Args[1])
+	p, err := util.ChallengePath()
 	if err != nil {
 		abort(err)
 	}
 
-	ab := strings.ToUpper(os.Args[2])
-	if !strings.ContainsAny(ab, "AB") {
-		abort(fmt.Errorf("unknown problem segment: %s", ab))
+	fmt.Println("Regenerating ./challenge/cmd/cmd.go up to Day", n)
+
+	_ = os.Remove(p)
+	genFile(p, rootTemplate, funcs, metadata{N: n})
+
+	for day := 1; day <= n; day++ {
+		genDay(day)
+	}
+}
+
+func dayLimit(now time.Time) int {
+	now = now.UTC()
+
+	if now.Year() > 2020 {
+		return 25
 	}
 
+	if now.Month() != time.December {
+		panic("It's not december yet!")
+	}
+
+	// Challenges unlock at 0500 UTC
+	if now.Hour() < 5 {
+		return util.IntClamp(0, now.Day()-1, 25)
+	}
+
+	return util.IntClamp(0, now.Day(), 25)
+}
+
+func genDay(n int) {
 	p, err := util.PkgPath(n)
 	if err != nil {
 		abort(err)
@@ -109,18 +83,22 @@ func main() {
 		abort(err)
 	}
 
-	m := metadata{N: n, AB: ab}
-	funcs := template.FuncMap{
-		"toLower": strings.ToLower,
-	}
+	generated := false
 
+	// Only try to generate code files if it looks like they're missing
+	// Not all days last year were easily testable so we may not keep the _test.go
+	// files around. This way we don't regenerate them if they get manually deleted.
 	gluePath := filepath.Join(p, "import.go")
 	if _, stat := os.Stat(gluePath); stat != nil && os.IsNotExist(stat) {
-		genFile(gluePath, glueTemplate, funcs, m)
-	}
+		generated = true
+		genFile(gluePath, glueTemplate, funcs, metadata{N: n})
 
-	genFile(filepath.Join(p, fmt.Sprintf("%s.go", strings.ToLower(ab))), problemTemplate, funcs, m)
-	genFile(filepath.Join(p, fmt.Sprintf("%s_test.go", strings.ToLower(ab))), testTemplate, funcs, m)
+		for _, part := range parts {
+			m := metadata{N: n, AB: part}
+			genFile(filepath.Join(p, fmt.Sprintf("%s.go", strings.ToLower(part))), problemTemplate, funcs, m)
+			genFile(filepath.Join(p, fmt.Sprintf("%s_test.go", strings.ToLower(part))), testTemplate, funcs, m)
+		}
+	}
 
 	goimports := exec.Command("goimports", "-w", p)
 	if err := goimports.Run(); err != nil {
@@ -128,6 +106,7 @@ func main() {
 	}
 
 	if _, stat := os.Stat(filepath.Join(p, "input.txt")); os.IsNotExist(stat) {
+		generated = true
 		fmt.Println("fetching input for day", n)
 		problemInput, err := getInput(n)
 		if err != nil {
@@ -137,13 +116,13 @@ func main() {
 		if err := ioutil.WriteFile(filepath.Join(p, "input.txt"), problemInput, 0644); err != nil {
 			panic(err)
 		}
-	} else {
-		fmt.Println("input already downloaded, skipping...")
 	}
 
-	fmt.Printf("Generated problem %s for day %d. Be sure to add it to main.go\n", ab, n)
-
-	// TODO: Can we modify main.go easily?
+	if generated {
+		fmt.Printf("Generated problems for day %d\n", n)
+	} else {
+		fmt.Printf("Day %d up-to-date\n", n)
+	}
 }
 
 func genFile(path, t string, funcs template.FuncMap, m metadata) {
@@ -229,6 +208,6 @@ func mustClose(c io.Closer) {
 }
 
 func abort(err error) {
-	fmt.Printf("%s\n\nsyntax: go run gen/problem.go <day> <a|b>\n", err.Error())
+	fmt.Printf("%s\n\nsyntax: go run gen/day.go <day> <a|b>\n", err.Error())
 	os.Exit(1)
 }
