@@ -4,42 +4,29 @@ import "github.com/nlowe/aoc2020/challenge"
 
 const tileTree = '#'
 
+// mountain is a simple wrapper around challenge.TileMap that
+// scales infinitely in the X direction.
 type mountain struct {
-	m []rune
-
-	w int
-	h int
+	*challenge.TileMap
 }
 
-func parseMountain(input *challenge.Input) mountain {
-	lines := input.LineSlice()
+// TileAt wraps (challenge.TileMap).TileAt(...) as if the map
+// repeats infinitely in the X direction.
+func (m mountain) TileAt(x, y int) rune {
+	w, _ := m.Size()
 
-	result := mountain{
-		m: make([]rune, len(lines)*len(lines[0])),
-		w: len(lines[0]),
-		h: len(lines),
-	}
-
-	for row, line := range lines {
-		for column, tile := range line {
-			result.m[result.w*row+column] = tile
-		}
-	}
-
-	return result
-}
-
-func (m mountain) tileAt(x, y int) rune {
-	return m.m[(m.w*y)+(x%m.w)]
+	return m.TileMap.TileAt(x%w, y)
 }
 
 func (m mountain) treesAlongSlope(dx, dy int) int {
+	_, h := m.Size()
+
 	trees := 0
 
 	x := 0
 	y := 0
-	for y < m.h {
-		if m.tileAt(x, y) == tileTree {
+	for y < h {
+		if m.TileAt(x, y) == tileTree {
 			trees++
 		}
 

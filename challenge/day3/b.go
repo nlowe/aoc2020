@@ -18,7 +18,7 @@ func bCommand() *cobra.Command {
 }
 
 func b(challenge *challenge.Input) int {
-	mountain := parseMountain(challenge)
+	m := mountain{challenge.TileMap()}
 
 	trees := 1
 	tests := []struct {
@@ -33,7 +33,7 @@ func b(challenge *challenge.Input) int {
 	}
 
 	for _, tt := range tests {
-		trees *= mountain.treesAlongSlope(tt.dx, tt.dy)
+		trees *= m.treesAlongSlope(tt.dx, tt.dy)
 	}
 
 	return trees

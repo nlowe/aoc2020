@@ -18,7 +18,7 @@ func aCommand() *cobra.Command {
 }
 
 func a(challenge *challenge.Input) int {
-	m := parseMountain(challenge)
+	m := mountain{challenge.TileMap()}
 
 	return m.treesAlongSlope(3, 1)
 }
