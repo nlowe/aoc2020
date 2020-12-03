@@ -33,7 +33,7 @@ func parseMountain(input *challenge.Input) mountain {
 }
 
 func (m mountain) tileAt(x, y int) rune {
-	return m.m[(m.w*(y%m.h))+(x%m.w)]
+	return m.m[(m.w*y)+(x%m.w)]
 }
 
 func (m mountain) treesAlongSlope(dx, dy int) int {
