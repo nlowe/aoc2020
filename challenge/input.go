@@ -54,3 +54,11 @@ func newInputFromReader(r io.Reader, c io.Closer) *Input {
 func (c *Input) Lines() <-chan string {
 	return c.lines
 }
+
+func (c *Input) LineSlice() (result []string) {
+	for line := range c.Lines() {
+		result = append(result, line)
+	}
+
+	return
+}
