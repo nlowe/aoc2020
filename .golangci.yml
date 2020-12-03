@@ -1,0 +1,14 @@
+run:
+  modules-download-mode: readonly
+  timeout: 5m
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - goconst
+    - gocritic
+    - gocyclo
+    - prealloc
+    - unconvert
+    - unparam

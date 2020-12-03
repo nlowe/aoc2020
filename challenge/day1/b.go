@@ -3,8 +3,6 @@ package day1
 import (
 	"fmt"
 
-	"github.com/nlowe/aoc2020/util"
-
 	"github.com/nlowe/aoc2020/challenge"
 	"github.com/spf13/cobra"
 )
@@ -20,11 +18,7 @@ func bCommand() *cobra.Command {
 }
 
 func b(challenge *challenge.Input) int {
-	var entries []int
-
-	for v := range challenge.Lines() {
-		entries = append(entries, util.MustAtoI(v))
-	}
+	entries := parsePasswords(challenge)
 
 	for i := range entries {
 		for j := i + 1; j < len(entries)-1; j++ {

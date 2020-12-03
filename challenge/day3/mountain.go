@@ -2,10 +2,7 @@ package day3
 
 import "github.com/nlowe/aoc2020/challenge"
 
-const (
-	tileOpen = '.'
-	tileTree = '#'
-)
+const tileTree = '#'
 
 type mountain struct {
 	m []rune
