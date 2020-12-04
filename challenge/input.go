@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"io"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -16,7 +18,17 @@ type Input struct {
 }
 
 func FromFile() *Input {
-	f, err := os.Open(viper.GetString("input"))
+	path := viper.GetString("input")
+	if path == "" {
+		_, f, _, ok := runtime.Caller(1)
+		if !ok {
+			panic("failed to determine input path, provide it with -i instead")
+		}
+
+		path = filepath.Join(filepath.Dir(f), "input.txt")
+	}
+
+	f, err := os.Open(path)
 	if err != nil {
 		panic(err)
 	}

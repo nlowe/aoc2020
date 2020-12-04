@@ -60,9 +60,7 @@ func NewRootCommand() *cobra.Command {
 
 	flags := result.PersistentFlags()
 
-	flags.StringP("input", "i", "", "Input File to read")
-	_ = result.MarkPersistentFlagRequired("input")
-
+	flags.StringP("input", "i", "", "Input File to read. If not specified, assumes ./challenge/dayN/input.txt for the currently running challenge")
 	flags.Bool("profile", false, "Profile implementation performance")
 
 	_ = viper.BindPFlags(flags)
