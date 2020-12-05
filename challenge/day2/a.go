@@ -14,7 +14,7 @@ func aCommand() *cobra.Command {
 		Use:   "a",
 		Short: "Day 2, Problem A",
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
+			fmt.Printf("Answer: %d\n", partA(challenge.FromFile()))
 		},
 	}
 }
@@ -48,7 +48,7 @@ func (p policy) valid(password string) bool {
 	return count >= p.min && count <= p.max
 }
 
-func a(challenge *challenge.Input) int {
+func partA(challenge *challenge.Input) int {
 	valid := 0
 
 	for line := range challenge.Lines() {

@@ -13,7 +13,7 @@ func aCommand() *cobra.Command {
 		Use:   "a",
 		Short: "Day 1, Problem A",
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", a(challenge.FromFile()))
+			fmt.Printf("Answer: %d\n", partA(challenge.FromFile()))
 		},
 	}
 }
@@ -29,7 +29,7 @@ func parsePasswords(challenge *challenge.Input) []int {
 	return entries
 }
 
-func a(challenge *challenge.Input) int {
+func partA(challenge *challenge.Input) int {
 	entries := parsePasswords(challenge)
 
 	for i := range entries {

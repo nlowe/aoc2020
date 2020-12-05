@@ -12,12 +12,12 @@ func bCommand() *cobra.Command {
 		Use:   "b",
 		Short: "Day 1, Problem B",
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", b(challenge.FromFile()))
+			fmt.Printf("Answer: %d\n", partB(challenge.FromFile()))
 		},
 	}
 }
 
-func b(challenge *challenge.Input) int {
+func partB(challenge *challenge.Input) int {
 	entries := parsePasswords(challenge)
 
 	for i := range entries {

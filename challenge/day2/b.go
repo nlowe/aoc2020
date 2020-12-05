@@ -13,7 +13,7 @@ func bCommand() *cobra.Command {
 		Use:   "b",
 		Short: "Day 2, Problem B",
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("Answer: %d\n", b(challenge.FromFile()))
+			fmt.Printf("Answer: %d\n", partB(challenge.FromFile()))
 		},
 	}
 }
@@ -22,7 +22,7 @@ func (p policy) strictlyValid(password string) bool {
 	return (rune(password[p.min-1]) == p.target) != (rune(password[p.max-1]) == p.target)
 }
 
-func b(challenge *challenge.Input) int {
+func partB(challenge *challenge.Input) int {
 	valid := 0
 
 	for line := range challenge.Lines() {

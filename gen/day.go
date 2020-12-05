@@ -98,6 +98,8 @@ func genDay(n int) {
 			genFile(filepath.Join(p, fmt.Sprintf("%s.go", strings.ToLower(part))), problemTemplate, funcs, m)
 			genFile(filepath.Join(p, fmt.Sprintf("%s_test.go", strings.ToLower(part))), testTemplate, funcs, m)
 		}
+
+		genFile(filepath.Join(p, "benchmark_test.go"), benchmarkTemplate, funcs, metadata{N: n})
 	}
 
 	goimports := exec.Command("goimports", "-w", p)

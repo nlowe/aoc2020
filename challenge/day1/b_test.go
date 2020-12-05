@@ -10,7 +10,7 @@ import (
 func TestB(t *testing.T) {
 	input := challenge.FromLiteral(day1example)
 
-	result := b(input)
+	result := partB(input)
 
 	require.Equal(t, 241861950, result)
 }

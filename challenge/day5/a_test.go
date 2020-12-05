@@ -13,7 +13,7 @@ BFFFBBFRRR
 FFFBBBFRRR
 BBFFBBFRLL`)
 
-	result := a(input)
+	result := partA(input)
 
 	require.Equal(t, 820, result)
 }

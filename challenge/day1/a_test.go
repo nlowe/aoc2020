@@ -18,7 +18,7 @@ const day1example = `1721
 func TestA(t *testing.T) {
 	input := challenge.FromLiteral(day1example)
 
-	result := a(input)
+	result := partA(input)
 
 	require.Equal(t, 514579, result)
 }
