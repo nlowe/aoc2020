@@ -3,35 +3,28 @@ package day5
 import (
 	"fmt"
 	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/nlowe/aoc2020/challenge"
 )
 
 const (
-	tokenFront = 'F'
-	tokenBack  = 'B'
-	tokenLeft  = 'L'
-	tokenRight = 'R'
+	tokenFront = "F"
+	tokenBack  = "B"
+	tokenLeft  = "L"
+	tokenRight = "R"
 )
 
-func seatID(line string) int {
-	id := 0
+var replacer = strings.NewReplacer(tokenFront, "0", tokenBack, "1", tokenLeft, "0", tokenRight, "1")
 
-	for _, token := range line {
-		id <<= 1
-		switch token {
-		case tokenFront:
-		case tokenBack:
-			id |= 1
-		case tokenLeft:
-		case tokenRight:
-			id |= 1
-		default:
-			panic(fmt.Errorf("unknown token parsing assignment %s: %s", line, string(token)))
-		}
+func seatID(line string) int {
+	id, err := strconv.ParseInt(replacer.Replace(line), 2, 0)
+	if err != nil {
+		panic(fmt.Errorf("failed to parse seat %s: %w", line, err))
 	}
 
-	return id
+	return int(id)
 }
 
 func parseSeats(challenge *challenge.Input) []int {

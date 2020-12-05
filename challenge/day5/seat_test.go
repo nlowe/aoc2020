@@ -23,7 +23,7 @@ func TestSeatID(t *testing.T) {
 	}
 
 	t.Run("Panics on invalid token", func(t *testing.T) {
-		require.PanicsWithError(t, "unknown token parsing assignment abc: a", func() {
+		require.PanicsWithError(t, `failed to parse seat abc: strconv.ParseInt: parsing "abc": invalid syntax`, func() {
 			_ = seatID("abc")
 		})
 	})
