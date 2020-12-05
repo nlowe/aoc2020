@@ -7,16 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	rows    = 127
-	columns = 7
-
-	tokenFront = 'F'
-	tokenBack  = 'B'
-	tokenLeft  = 'L'
-	tokenRight = 'R'
-)
-
 func aCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "a",

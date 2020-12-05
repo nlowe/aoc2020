@@ -7,32 +7,31 @@ import (
 	"github.com/nlowe/aoc2020/challenge"
 )
 
-func seatID(line string) int {
-	minRow := 0
-	maxRow := rows
+const (
+	tokenFront = 'F'
+	tokenBack  = 'B'
+	tokenLeft  = 'L'
+	tokenRight = 'R'
+)
 
-	minColumn := 0
-	maxColumn := columns
+func seatID(line string) int {
+	id := 0
 
 	for _, token := range line {
-		rowDelta := (maxRow-minRow)/2 + 1
-		columnDelta := (maxColumn-minColumn)/2 + 1
-
+		id <<= 1
 		switch token {
 		case tokenFront:
-			maxRow -= rowDelta
 		case tokenBack:
-			minRow += rowDelta
+			id |= 1
 		case tokenLeft:
-			maxColumn -= columnDelta
 		case tokenRight:
-			minColumn += columnDelta
+			id |= 1
 		default:
 			panic(fmt.Errorf("unknown token parsing assignment %s: %s", line, string(token)))
 		}
 	}
 
-	return maxRow*(columns+1) + maxColumn
+	return id
 }
 
 func parseSeats(challenge *challenge.Input) []int {
