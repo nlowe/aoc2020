@@ -107,7 +107,7 @@ func {{ .AB | toLower }}Command() *cobra.Command {
 }
 
 func part{{ .AB | toUpper }}(challenge *challenge.Input) int {
-    return 0
+    panic("Not implemented!")
 }
 `
 
