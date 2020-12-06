@@ -22,6 +22,7 @@ var (
 	parts = [...]string{"A", "B"}
 	funcs = template.FuncMap{
 		"toLower": strings.ToLower,
+		"toUpper": strings.ToUpper,
 		"seq": func(start, end int) (result []int) {
 			for i := start; i <= end; i++ {
 				result = append(result, i)

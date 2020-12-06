@@ -96,17 +96,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func part{{ .AB | toUpper }}Command() *cobra.Command {
+func {{ .AB | toLower }}Command() *cobra.Command {
     return &cobra.Command{
         Use:   "{{ .AB | toLower }}",
         Short: "Day {{ .N }}, Problem {{ .AB }}",
         Run: func(_ *cobra.Command, _ []string) {
-            fmt.Printf("Answer: %d\n", {{ .AB | toLower }}(challenge.FromFile()))
+            fmt.Printf("Answer: %d\n", part{{ .AB | toUpper }}(challenge.FromFile()))
         },
     }
 }
 
-func {{ .AB | toLower }}(challenge *challenge.Input) int {
+func part{{ .AB | toUpper }}(challenge *challenge.Input) int {
     return 0
 }
 `
@@ -123,7 +123,7 @@ import (
 func Test{{ .AB }}(t *testing.T) {
 	input := challenge.FromLiteral("foobar")
 
-	result := {{ .AB | toLower }}(input)
+	result := part{{ .AB | toUpper }}(input)
 
 	require.Equal(t, 42, result)
 }
