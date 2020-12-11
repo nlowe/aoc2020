@@ -18,28 +18,26 @@ func bCommand() *cobra.Command {
 }
 
 func partB(challenge *challenge.Input) int {
-	// TODO: Figure out why removing the starting 0 works for
-	//       the small test case but not the larger one
-	adapters := append([]int{0}, parseAdapters(challenge)...)
-	return permute(adapters, map[int]int{})
+	return permute(0, parseAdapters(challenge), map[int]int{})
 }
 
-func permute(remaining []int, memo map[int]int) int {
+func permute(previous int, remaining []int, memo map[int]int) int {
 	if len(remaining) == 1 {
 		return 1
 	}
 
-	if count, ok := memo[remaining[0]]; ok {
+	if count, ok := memo[previous]; ok {
 		return count
 	}
 
-	count := 0
-	for i := 1; i < len(remaining); i++ {
-		if remaining[i]-remaining[0] <= 3 {
-			count += permute(remaining[i:], memo)
-		}
+	// Assume remaining[0] is required
+	count := permute(remaining[0], remaining[1:], memo)
+
+	// If it's optional, also add the permutations without it
+	if remaining[1]-previous <= 3 {
+		count += permute(previous, remaining[1:], memo)
 	}
 
-	memo[remaining[0]] = count
+	memo[previous] = count
 	return count
 }
