@@ -15,7 +15,8 @@ type mountain struct {
 func (m mountain) TileAt(x, y int) rune {
 	w, _ := m.Size()
 
-	return m.TileMap.TileAt(x%w, y)
+	t, _ := m.TileMap.TileAt(x%w, y)
+	return t
 }
 
 func (m mountain) treesAlongSlope(dx, dy int) int {

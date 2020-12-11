@@ -21,21 +21,28 @@ func (t *TileMap) Size() (int, int) {
 	return t.w, t.h
 }
 
-func (t *TileMap) boundsCheck(x, y int) {
-	if x < 0 || y < 0 || x >= t.w || y >= t.h {
-		panic(fmt.Errorf("out of bounds tile access: [%d, %d] is not within the %dx%d map", x, y, t.w, t.h))
-	}
+func (t *TileMap) outOfBounds(x, y int) bool {
+	return x < 0 || y < 0 || x >= t.w || y >= t.h
 }
 
-func (t *TileMap) indexOf(x, y int) int {
-	t.boundsCheck(x, y)
-	return x + (t.w * y)
+func (t *TileMap) indexOf(x, y int) (int, bool) {
+	return x + (t.w * y), !t.outOfBounds(x, y)
 }
 
 func (t *TileMap) SetTile(x, y int, tile rune) {
-	t.tiles[t.indexOf(x, y)] = tile
+	idx, ok := t.indexOf(x, y)
+	if !ok {
+		panic(fmt.Errorf("out of bounds tile access: [%d, %d] is not within the %dx%d map", x, y, t.w, t.h))
+	}
+
+	t.tiles[idx] = tile
 }
 
-func (t *TileMap) TileAt(x, y int) rune {
-	return t.tiles[t.indexOf(x, y)]
+func (t *TileMap) TileAt(x, y int) (rune, bool) {
+	idx, ok := t.indexOf(x, y)
+	if !ok {
+		return ' ', false
+	}
+
+	return t.tiles[idx], true
 }
