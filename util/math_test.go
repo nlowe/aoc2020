@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -68,4 +70,54 @@ func TestIntClamp(t *testing.T) {
 			_ = IntClamp(2, 0, 1)
 		})
 	})
+}
+
+func TestIntSafeMod(t *testing.T) {
+	tests := []struct {
+		d        int
+		m        int
+		expected int
+	}{
+		{123, -10, -7},
+		{123, 10, 3},
+		{-123, -10, -3},
+		{-123, 10, 7},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%d %% %d", tt.d, tt.m), func(t *testing.T) {
+			require.Equal(t, tt.expected, IntSafeMod(tt.d, tt.m))
+		})
+	}
+}
+
+func TestManhattanDistance(t *testing.T) {
+	tests := []struct {
+		x1       int
+		y1       int
+		x2       int
+		y2       int
+		expected int
+	}{
+		{2, 3, 4, 5, 4},
+		{2, 3, 4, -5, 10},
+		{2, 3, -4, 5, 8},
+		{2, 3, -4, -5, 14},
+		{2, -3, 4, 5, 10},
+		{2, -3, 4, -5, 4},
+		{2, -3, -4, 5, 14},
+		{2, -3, -4, -5, 8},
+		{-2, 3, 4, 5, 8},
+		{-2, 3, 4, -5, 14},
+		{-2, 3, -4, 5, 4},
+		{-2, 3, -4, -5, 10},
+		{-2, -3, 4, 5, 14},
+		{-2, -3, 4, -5, 8},
+		{-2, -3, -4, 5, 10},
+		{-2, -3, -4, -5, 4},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%d,%d,%d,%d", tt.x1, tt.y1, tt.x2, tt.y2), func(t *testing.T) {
+			require.Equal(t, tt.expected, ManhattanDistance(tt.x1, tt.y1, tt.x2, tt.y2))
+		})
+	}
 }

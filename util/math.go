@@ -1,6 +1,16 @@
 package util
 
-import "fmt"
+import (
+	"fmt"
+)
+
+func IntAbs(n int) int {
+	if n < 0 {
+		return -1 * n
+	}
+
+	return n
+}
 
 func IntMax(a, b int) int {
 	if a > b {
@@ -24,4 +34,17 @@ func IntClamp(low, n, high int) int {
 	}
 
 	return IntMax(IntMin(n, high), low)
+}
+
+func IntSafeMod(d, m int) int {
+	res := d % m
+	if (res < 0 && m > 0) || (res > 0 && m < 0) {
+		return res + m
+	}
+
+	return res
+}
+
+func ManhattanDistance(x1, y1, x2, y2 int) int {
+	return IntAbs(x2-x1) + IntAbs(y2-y1)
 }
