@@ -38,6 +38,10 @@ github.com/danieljoos/wincred v1.0.2/go.mod h1:SnuYRW9lp1oJrZX/dXJqr0cPK5gYXqx3E
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/deanveloper/modmath v0.0.0-20180521023214-c82838591061 h1:fc4r99SRiiYTTYWkthoD4CsSbpD9gDsMsVAF7hE2sLk=
+github.com/deanveloper/modmath v0.0.0-20180521023214-c82838591061/go.mod h1:m/dzNM7O2q22OXlvWp6dN1nQJ5ayvn/0fOBhruSBtss=
+github.com/deanveloper/nikola v0.0.0-20180521021810-10f97b4e80f4 h1:IUt8CzNT0foOYsde9HpkZyPqnmOrgDIwFAS3eWr52K8=
+github.com/deanveloper/nikola v0.0.0-20180521021810-10f97b4e80f4/go.mod h1:cWWudgg2of8kS7NFKlVn8HWfL+UJpBxeQVsocBL0xWA=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/dgryski/go-sip13 v0.0.0-20181026042036-e10d5fee7954/go.mod h1:vAd38F8PWV+bWy6jNmig1y/TA+kYO4g3RSRF0IAv0no=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=

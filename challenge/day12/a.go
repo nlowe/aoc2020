@@ -3,6 +3,7 @@ package day12
 import (
 	"fmt"
 
+	"github.com/deanveloper/modmath/v1"
 	"github.com/nlowe/aoc2020/challenge"
 	"github.com/nlowe/aoc2020/util"
 	"github.com/spf13/cobra"
@@ -69,9 +70,9 @@ func partA(challenge *challenge.Input) int {
 		case opWest:
 			x -= distance
 		case opRotateLeft:
-			face = util.IntSafeMod(face-distance/90, 4)
+			face = modmath.Mod(face-distance/90, 4)
 		case opRotateRight:
-			face = util.IntSafeMod(face+distance/90, 4)
+			face = modmath.Mod(face+distance/90, 4)
 		default:
 			panic(fmt.Errorf("unknown op: %s", string(op)))
 		}

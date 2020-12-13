@@ -3,6 +3,7 @@ module github.com/nlowe/aoc2020
 go 1.15
 
 require (
+	github.com/deanveloper/modmath v0.0.0-20180521023214-c82838591061
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mitchellh/mapstructure v1.4.0 // indirect

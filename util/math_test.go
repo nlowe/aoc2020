@@ -72,24 +72,6 @@ func TestIntClamp(t *testing.T) {
 	})
 }
 
-func TestIntSafeMod(t *testing.T) {
-	tests := []struct {
-		d        int
-		m        int
-		expected int
-	}{
-		{123, -10, -7},
-		{123, 10, 3},
-		{-123, -10, -3},
-		{-123, 10, 7},
-	}
-	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%d %% %d", tt.d, tt.m), func(t *testing.T) {
-			require.Equal(t, tt.expected, IntSafeMod(tt.d, tt.m))
-		})
-	}
-}
-
 func TestManhattanDistance(t *testing.T) {
 	tests := []struct {
 		x1       int
