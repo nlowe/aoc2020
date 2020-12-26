@@ -18,5 +18,10 @@ func bCommand() *cobra.Command {
 }
 
 func partB(challenge *challenge.Input) int {
-	panic("Not implemented!")
+	sum := 0
+	for eqn := range challenge.Lines() {
+		sum += evaluate(eqn, map[string]int{"*": 1, "+": 2})
+	}
+
+	return sum
 }
