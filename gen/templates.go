@@ -121,7 +121,8 @@ import (
 )
 
 func Test{{ .AB }}(t *testing.T) {
-	input := challenge.FromLiteral("foobar")
+	t.Skipf("Challenge not yet solved")
+input := challenge.FromLiteral("foobar")
 
 	result := part{{ .AB | toUpper }}(input)
 

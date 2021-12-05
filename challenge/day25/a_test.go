@@ -8,6 +8,7 @@ import (
 )
 
 func TestA(t *testing.T) {
+	t.Skipf("Challenge not yet solved")
 	input := challenge.FromLiteral("foobar")
 
 	result := partA(input)
